@@ -15,6 +15,9 @@ export const authStore = reactive({
     setUser(newUser){
         this.user = newUser
         localStorage.setItem('user', JSON.stringify(newUser))
+    },
+    isAdmin(){
+        return this.user?.role === 'admin'
     }
 })
 
