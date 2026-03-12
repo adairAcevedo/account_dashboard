@@ -2,7 +2,7 @@
     <div class="relative grid min-h-screen grid-cols-[1fr_2.5rem_auto_2.5rem_1fr] grid-rows-[1fr_1px_auto_1px_1fr] bg-white [--pattern-fg:var(--color-gray-950)]/5 dark:bg-gray-950 dark:[--pattern-fg:var(--color-white)]/10">  
         <div class="col-start-3 row-start-3 flex max-w-lg flex-col bg-gray-100 p-2 dark:bg-white/10">
             <div class="rounded-xl bg-white p-10 text-sm/7 text-gray-700 dark:bg-gray-950">    
-                <form @submit.prevent="sendParams()">
+                <form @submit.prevent="validateParams()">
                     <div class="space-y-12">
                         <div class="border-b border-gray-900/10 pb-12 dark:border-white/10">
                             <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Login</h2>
@@ -48,62 +48,56 @@
 
 <script setup>
 // login para los clientes
-// me quede en atrapar el token de la cabecera de la peticion
 import {ref} from 'vue'
 import md5 from 'md5'
+import { jwtDecode } from "jwt-decode";
 const url = import.meta.env.VITE_BASE_URL;
 let formUser = ref({user: "", password: ""})
 const ENDPOINT = "/users/login"
 let msj_errors = ref('')
-const validateParams= () =>{
 
-}
-
-const sendParams = () => {
-    console.log('hola')
+const validateParams = async () => {
     if(formUser.value.user !== "" && formUser.value.password !== ""){
         msj_errors.value = ''
-        postData(ENDPOINT, {email: formUser.value.user, password: md5(formUser.value.password)})
+        let response = await postData(ENDPOINT, {email: formUser.value.user, password: md5(formUser.value.password)});
+        validateLogin(response);
     }else{
         msj_errors.value = "Credentials are invalids"
     }
 }
 
+const validateLogin = (response) => {
+    if(response instanceof Error){
+        return 0;
+    }
+    
+    const token = response.headers.get('authorization')
+    const decoded = jwtDecode(token);
+    
+    console.log(decoded)
+    msj_errors.value = "all it is rigth"
+}
 
-const postData = async (endpoint, data, headers = {}) =>{
-    console.log(data)
-    console.log(url)
+const postData = async (endpoint, data, headers = {}) => {
     try{
         let response = await fetch(`${url}${endpoint}`,{
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         })
-        console.log(response)
         if(response.status == 200){
-            return response.json();
-        }else{
-            throw new Error(`Response status: ${response.status}`);
+            return response;
         }
+        if(response.status == 403 || response.status == 401){
+            msj_errors.value = await response.text()
+            throw new Error(`Response status: ${response.status}`)
+        } 
+        msj_errors.value = "Unknow error, contact support"
+        throw new Error(`Response status: ${response.status}`)
     }catch(err){
-        throw err;
+        throw err
     }finally{
         console.log("finish post request")
     }
 }
-
-// const getData = async (endpoint) => {
-//     try{
-//         let response = await fetch(`${process.env.BASE_URL}${endpoint}`)
-//         if(response.status == 200){
-//             return response.json();
-//         }else{
-//             throw new Error(`Response status: ${response.status}`);
-//         }
-//     }catch(err){
-//         throw err;
-//     }finally{
-//         console.log("finish post request")
-//     }
-// }
 </script>
