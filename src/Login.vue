@@ -51,6 +51,10 @@
 import {ref} from 'vue'
 import md5 from 'md5'
 import { jwtDecode } from "jwt-decode";
+import { authStore } from './stores/authStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const url = import.meta.env.VITE_BASE_URL;
 let formUser = ref({user: "", password: ""})
 const ENDPOINT = "/users/login"
@@ -72,10 +76,10 @@ const validateLogin = (response) => {
     }
     
     const token = response.headers.get('authorization')
-    const decoded = jwtDecode(token);
-    
-    console.log(decoded)
-    msj_errors.value = "all it is rigth"
+    const tokenDecode = jwtDecode(token);
+    authStore.setToken(token)
+    authStore.setUser({name: tokenDecode["nombre"], lastName: tokenDecode["apellido"], access_name: formUser.value.user})
+    router.push({name: 'Dashboard'})
 }
 
 const postData = async (endpoint, data, headers = {}) => {
