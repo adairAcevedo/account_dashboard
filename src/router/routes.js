@@ -24,7 +24,7 @@ const routes = [
     {
         path: '/movements',
         name: 'Movements',
-        component: () => import('../views/Dashboard.vue'),
+        component: () => import('../views/UserMovements.vue'),
         meta: {requiresAuth: true}
     },
     {
