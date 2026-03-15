@@ -51,11 +51,13 @@
     const loginConfig = {
         admin: {
             endpoint: '/users/loginAdmin',
-            fields: {identifier: 'user', secret: 'password'}
+            fields: {identifier: 'user', secret: 'password'},
+            initRoute: 'Dashboard'
         },
         client: {
             endpoint: '/users/login',
-            field: {identifier: 'email', secret: 'password'}
+            field: {identifier: 'email', secret: 'password'},
+            initRoute: 'Movements'
         }
     }
 
@@ -89,6 +91,7 @@
         const tokenDecode = jwtDecode(token);
         authStore.setToken(token)
         authStore.setUser({name: tokenDecode["nombre"], lastName: tokenDecode["apellido"], access_name: formUser.value.user})
-        router.push({name: 'Dashboard'})
+        // router.push({name: 'Dashboard'})
+        router.push({name: currentConfig.initRoute})
     }
 </script>
