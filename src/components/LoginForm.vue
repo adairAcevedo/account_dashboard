@@ -39,6 +39,11 @@
     import {ref} from 'vue'
     import {loginApi} from '../utils/methods'
     import md5 from 'md5'
+    import { jwtDecode } from "jwt-decode";
+    import { authStore } from '@/stores/authStore';
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
     const props = defineProps(['type'])
     let formUser = ref({user: "", password: ""})
     let msj_errors = ref("")
