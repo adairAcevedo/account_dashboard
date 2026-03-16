@@ -78,6 +78,7 @@
 
     const validateLogin = (response) => {
         if(response instanceof Error){
+            console.log("ocurio un error", response)
             return 0;
         }
 
