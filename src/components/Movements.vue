@@ -44,13 +44,13 @@
     </div>
 </template>
 <script setup>
-import {ref} from 'vue'
+// import {ref} from 'vue'
 const props = defineProps(['movements', 'sortList', 'isLoading'])
 const emit = defineEmits(['changeSort']);
 import { centsToUnits } from '@/utils/methods';
 import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
 
-const sort = ref({field: 'created_at', direction: 'desc'})
+// const sort = ref({field: 'created_at', direction: 'desc'})
 const sortNextDirections = {
   desc: 'asc',
   asc: 'desc'

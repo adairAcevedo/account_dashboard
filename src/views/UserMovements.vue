@@ -5,7 +5,7 @@
     </div>
     
     <Movements :movements="movements" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort"/>
-    <Pagination :pagination="pagination"/>
+    <Pagination :paginate="pagination" @change-paginate="handleChangePage" :itemsCount="movements.length" />
   </BaseLayout>
 </template>
 
@@ -20,17 +20,25 @@ import { get, clientMovementsURL } from '@/utils/methods';
 
 onMounted(async () => await getMovements())
 
-let title = ref("Movimientos")
+let title = ref("Movements")
 let errorMsj = ref("");
 let isLoading = ref(true);
 let movements = ref([]);
-let pagination = ref({});
+
+// renombrar los campos
+let pagination = ref({
+		page: 1,
+		totalPages: 1,
+		totalItems: 0,
+		hasMoreItems: false
+	});
+
 let sort = ref({field: 'created_at', direction: 'desc'});
-let currentPage = ref(1);
+// let currentPage = ref(1);
 
 const getMovements = async (params = {}) =>{
   let query = {
-    page: params['page'] ? params.page : currentPage.value,
+    page: params['page'] ? params.page : pagination.value.page,
     sortBy: params['field'] ? params.field : sort.value.field,
     sortDirection: params['direction'] ? params.direction : sort.value.direction
   }
@@ -53,7 +61,13 @@ const validGetMovements = (response) =>{
     isLoading.value = false;
     return 0;
   }
-  pagination.value = response.res['pagination']
+  pagination.value = {
+    page: response.res['pagination']['page'],
+		totalPages: response.res['pagination']['totalPages'],
+		totalItems: response.res['pagination']['totalItems'],
+		hasMoreItems: response.res['pagination']['hasMoreItems']
+  }
+  
   movements.value = response.res['records']
   isLoading.value = false;
 }
@@ -61,15 +75,28 @@ const validGetMovements = (response) =>{
 const handleChangeSort = (updateSort) => {
   console.log('updateSort value ',updateSort)
   isLoading.value = true
-  sort.value ={...updateSort}
+  // sort.value ={...updateSort}
 
   getMovements(
     {
-      page: currentPage.value,
+      page: pagination.value.page,
       field: updateSort.field,
       direction: updateSort.direction
     }
+  ).then(
+    sort.value ={...updateSort}
   )
+}
+
+const handleChangePage = (updatePage) => {
+  console.log('update Page', updatePage)
+  isLoading.value = true;
+  
+  getMovements({
+    page: updatePage.page,
+    field: sort.value.field,
+    direction: sort.value.direction
+  })
 }
 
 
