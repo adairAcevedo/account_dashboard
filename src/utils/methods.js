@@ -1,4 +1,4 @@
-const url = import.meta.env.VITE_BASE_URL;
+const base_url = import.meta.env.VITE_BASE_URL;
 
 
 // client urls
@@ -12,7 +12,7 @@ export const usersURL = '/users/list'
 
 export const loginApi = async (endpoint, data, headers = {}) => {
     try{
-        let response = await fetch(`${url}${endpoint}`,{
+        let response = await fetch(`${base_url}${endpoint}`,{
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
@@ -35,9 +35,11 @@ export const loginApi = async (endpoint, data, headers = {}) => {
 
 export const get = async (endpoint, query = {}, headers = {}) => {
     const defaultHeaders = {'Content-Type': 'application/json'}
-    console.log('hola')
+    let queryParams = new URLSearchParams(query).toString();
+
+    let url = queryParams.length > 0 ? `${base_url}${endpoint}?${queryParams}` : `${base_url}${endpoint}`
     try{
-        let response = await fetch(`${url}${endpoint}`,{
+        let response = await fetch(`${url}`,{
             method: "GET",
             headers: {...defaultHeaders, ...headers}
         })
@@ -50,9 +52,9 @@ export const get = async (endpoint, query = {}, headers = {}) => {
         }
         return {errorMsj: "Unknow error, contact support", status: response.status};
     }catch(err){
-        throw err
+        return {errorMsj: "Service not available ", status: err};
     }finally{
-        console.log("finish post request")
+        console.log("finish get request")
     }
 }
 
