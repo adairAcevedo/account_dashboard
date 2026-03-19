@@ -37,6 +37,12 @@
                 <a href="#" class="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0 md:inline-flex">8</a>
                 <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">9</a>
                 <a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">10</a> -->
+
+                
+                <button v-for="page in countItems.pages" aria-current="page" 
+                :class="{'bg-indigo-500': page === paginate.page, 'hover:bg-white/5' : page != paginate.page && typeof page == 'number' }"
+                @click="clickPage(page)"
+                class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 focus:z-20 focus:outline-offset-0">{{ page }}</button>
                 <button @click="nextPage()" v-if="paginate.totalPages > paginate.page" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
                     <span class="sr-only">Next </span>
                     <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
@@ -53,29 +59,34 @@
 </template>
 <script setup>
 
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 const props = defineProps(['paginate', 'itemsCount'])
 const emit = defineEmits(['changePaginate'])
-
-
-const clickPage = () => {
-
-}
 
 const countItems = computed(() => {
     if (props.paginate.totalPages == props.paginate.page){
         return {
             prevItems: props.paginate.totalItems - props.itemsCount + 1,
-            currentTotal: props.paginate.totalItems
+            currentTotal: props.paginate.totalItems,
+            pages: props.paginate.totalPages
         }
     }else {
         return {
             prevItems: props.paginate.page == 1 ? 1 : (props.itemsCount * (props.paginate.page-1)) + 1,
             currentTotal: props.paginate.page == 1 ? props.itemsCount : (props.itemsCount * props.paginate.page),
+            pages: Math.round(props.paginate.totalItems / props.itemsCount)
+
         } 
     }
     
 })
+
+const clickPage = (newPage) => {
+    if(props.paginate.page != newPage && typeof newPage == 'number'){
+        console.log(`change page from ${props.paginate.page} to ${newPage}`)
+        emit('changePaginate', {page: newPage})
+    }
+}
 
 const nextPage = () => {
     console.log(`change next page from ${props.paginate.page} to ${props.paginate.page +1 }`)
@@ -89,4 +100,6 @@ const prevPage = () => {
     emit('changePaginate', {page: props.paginate.page - 1})
 }
 
-</script>
+
+// falta prevenir que si hay mas de 6 paginas, que solo imprima las primeras 3 y las ultimas tres y en medio ponga puntos suspensivos
+</script>   
