@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 import { authStore } from '../stores/authStore';
+import { useAdminStore } from '@/stores/adminStore';
 
 const routes = [
     {
@@ -36,8 +37,8 @@ const routes = [
     },
     {
         path: '/admin/users/:id/movements',
-        name: 'UserMovements',
-        component: () => import('../views/UserMovements.vue'),
+        name: 'MovementsByUser',
+        component: () => import('../views/MovementsByUser.vue'),
         meta: {requiresAuth: true, role: 'admin'}
     },
 ]
@@ -51,12 +52,17 @@ const router = createRouter({
 router.beforeEach((to, from) =>{
     const isProtected = to.matched.some(record => record.meta.requiresAuth);
     const requiredRole = to.meta.role;
+    const adminStore = useAdminStore()
     if(isProtected && !authStore.token){
         return {name: 'Login'}
     }
     if(requiredRole && authStore.user?.role !== requiredRole){
         return {name: 'Dashboard'}
     }
+    if(to.name == 'MovementsByUser' && !adminStore.selectedUser){
+        return {name: 'Dashboard'}
+    }
+    
     return true
 })
 
