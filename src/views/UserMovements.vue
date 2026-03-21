@@ -34,7 +34,6 @@ let pagination = ref({
 	});
 
 let sort = ref({field: 'created_at', direction: 'desc'});
-// let currentPage = ref(1);
 
 const getMovements = async (params = {}) =>{
   let query = {
@@ -75,7 +74,6 @@ const validGetMovements = (response) =>{
 const handleChangeSort = (updateSort) => {
   console.log('updateSort value ',updateSort)
   isLoading.value = true
-  // sort.value ={...updateSort}
 
   getMovements(
     {
