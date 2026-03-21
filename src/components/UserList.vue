@@ -38,7 +38,7 @@
       </div>
       <div>
           <ul role="list" class="divide-y divide-white/5" v-for="user in users" :key="user.uid">
-            <li class="grid grid-cols-12 gap-x-6 py-5 items-center gap-x-6 py-5 hover:bg-gray-700" >
+            <li class="grid grid-cols-12 gap-x-6 py-5 items-center gap-x-6 py-5 hover:bg-gray-700 cursor-pointer" @click="clickItem(user)">
               <div class="col-span-2 flex min-w-0 gap-x-4 px-5">
                 <div class="min-w-0 flex-auto">
                   <p class="text-sm/6 font-semibold text-white">{{ user.nombre }}</p>
@@ -77,8 +77,7 @@
 </template>
 <script setup>
 const props = defineProps(['users', 'sortList', 'isLoading', 'class'])
-const emit = defineEmits(['changeSort']);
-import { centsToUnits } from '@/utils/methods';
+const emit = defineEmits(['changeSort', 'goItem']);
 import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
 
 // const sort = ref({field: 'created_at', direction: 'desc'})
@@ -88,9 +87,7 @@ const sortNextDirections = {
 }
 
 const clickSort = (field) => {
-  // call to parent component
   let directionValue = getDirectionValue(field)
-  console.log(`child update sort ${field} - ${directionValue}`)
   emit('changeSort', {field: field, direction: directionValue})
 }
 
@@ -99,6 +96,10 @@ const getDirectionValue = (field) => {
     return sortNextDirections[props.sortList.direction]
   }
   return 'desc'
+}
+
+const clickItem=(item) => {
+  emit('goItem', {item: item})
 }
 
 // make a component, to represente arrows funcionality

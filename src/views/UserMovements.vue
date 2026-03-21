@@ -13,10 +13,10 @@
 import BaseLayout from '@/components/BaseLayout.vue';
 import Movements from '@/components/Movements.vue';
 import Pagination from '@/components/Pagination.vue';
-import movementsData from '../utils/movements_example.json'
 import { authStore } from '@/stores/authStore';
 import {ref, onMounted} from 'vue'
-import { get, clientMovementsURL } from '@/utils/methods';
+import { get } from '@/utils/methods';
+import { clientMovementsURL } from '@/utils/endpoints';
 
 onMounted(async () => await getMovements())
 
@@ -66,6 +66,7 @@ const validGetMovements = (response) =>{
 		totalItems: response.res['pagination']['totalItems'],
 		hasMoreItems: response.res['pagination']['hasMoreItems']
   }
+  errorMsj.value = ''
   
   movements.value = response.res['records']
   isLoading.value = false;

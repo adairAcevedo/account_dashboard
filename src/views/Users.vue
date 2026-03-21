@@ -4,39 +4,37 @@
       <h2 class="text-lg text-red-300">{{ errorMsj }}</h2>
     </div>
     
-    <UserList :users="users" class="max-w-6xl" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort"/>
+    <UserList :users="users" class="max-w-6xl" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort" @go-item="handleGoUser"/>
     <Pagination :paginate="pagination" class="max-w-6xl" @change-paginate="handleChangePage" :itemsCount="users.length" />
   </BaseLayout>
 </template>
 
 <script setup>
 import BaseLayout from '@/components/BaseLayout.vue';
-import Movements from '@/components/Movements.vue';
+
 import Pagination from '@/components/Pagination.vue';
-import UsersData from '../utils/users_example.json'
+
 import { authStore } from '@/stores/authStore';
-import {ref, onMounted} from 'vue'
-import { get, usersURL } from '@/utils/methods';
+import {ref, onMounted} from 'vue';
+import { get } from '@/utils/methods';
+import { usersURL } from '@/utils/endpoints';
 import UserList from '@/components/UserList.vue';
+import { useAdminStore } from '@/stores/adminStore';
 
-// onMounted(async () => await getUsers())
+import router from '@/router/routes';
+onMounted(async () => await getUsers())
 
+const adminStore = useAdminStore();
 let title = ref("Users")
 let errorMsj = ref("");
 let isLoading = ref(true);
-let users = [...UsersData.records] //ref([]);
-
-
-// renombrar los campos
-// let pagination = ref({
-// 		page: 23,
-// 		totalPages: 23,
-// 		totalItems: 111,
-// 		hasMoreItems: false
-// 	});
-
-let pagination = {...UsersData.pagination}
-
+let users = ref([]);
+let pagination = ref({
+		page: 1,
+		totalPages: 1,
+		totalItems: 0,
+		hasMoreItems: false
+	});
 
 let sort = ref({field: 'created_at', direction: 'desc'});
 
@@ -71,13 +69,14 @@ const validgetUsers = (response) =>{
 		totalItems: response.res['pagination']['totalItems'],
 		hasMoreItems: response.res['pagination']['hasMoreItems']
   }
+  errorMsj.value = ''
   
   users.value = response.res['records']
   isLoading.value = false;
 }
 
 const handleChangeSort = (updateSort) => {
-  console.log('updateSort value ',updateSort)
+
   isLoading.value = true
 
   getUsers(
@@ -92,7 +91,7 @@ const handleChangeSort = (updateSort) => {
 }
 
 const handleChangePage = (updatePage) => {
-  console.log('update Page', updatePage)
+
   isLoading.value = true;
   
   getUsers({
@@ -100,6 +99,12 @@ const handleChangePage = (updatePage) => {
     field: sort.value.field,
     direction: sort.value.direction
   })
+}
+
+const handleGoUser = ({item: user}) =>{
+  console.log(user)
+  adminStore.setSelectedUser(user)
+  router.push({name: 'MovementsByUser', params: {id: user.uid}})
 }
 
 
