@@ -4,7 +4,7 @@ import { authStore } from '../stores/authStore';
 
 const routes = [
     {
-        path: '/loginAdmin',
+        path: '/login-admin',
         name: 'LoginAdmin',
         component: () => import('../views/AdminLogin.vue'),
         meta: { requiresAuth: false }
@@ -25,7 +25,7 @@ const routes = [
         path: '/movements',
         name: 'Movements',
         component: () => import('../views/UserMovements.vue'),
-        meta: {requiresAuth: true}
+        meta: {requiresAuth: true, role: 'client'}
     },
     {
         path: '/admin/users',
@@ -48,16 +48,16 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach((to, from, next) =>{
+router.beforeEach((to, from) =>{
     const isProtected = to.matched.some(record => record.meta.requiresAuth);
     const requiredRole = to.meta.role;
     if(isProtected && !authStore.token){
-        next({name: 'Login'})
+        return {name: 'Login'}
     }
     if(requiredRole && authStore.user?.role !== requiredRole){
-        return next({name: 'Dashboard'})
+        return {name: 'Dashboard'}
     }
-    next();
+    return true
 })
 
 export default router

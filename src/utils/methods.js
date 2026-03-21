@@ -10,7 +10,7 @@ export const userMovementsURL = '/users/:user_uid/movements'
 export const usersURL = '/users/list'
 
 
-export const loginApi = async (endpoint, data, headers = {}) => {
+export const postApi = async (endpoint, data, headers = {}) => {
     try{
         let response = await fetch(`${base_url}${endpoint}`,{
             method: "POST",

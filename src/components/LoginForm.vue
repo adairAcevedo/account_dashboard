@@ -37,7 +37,7 @@
 </template>
 <script setup>
     import {ref} from 'vue'
-    import {loginApi} from '../utils/methods'
+    import {postApi} from '../utils/methods'
     import md5 from 'md5'
     import { jwtDecode } from "jwt-decode";
     import { authStore } from '@/stores/authStore';
@@ -50,14 +50,16 @@
 
     const loginConfig = {
         admin: {
-            endpoint: '/users/loginAdmin',
-            fields: {identifier: 'user', secret: 'password'},
-            initRoute: 'Dashboard'
+            endpoint: '/users/adminLogin',
+            field: {identifier: 'user', secret: 'password'},
+            initRoute: 'Dashboard',
+            role: 'admin'
         },
         client: {
             endpoint: '/users/login',
             field: {identifier: 'email', secret: 'password'},
-            initRoute: 'Movements'
+            initRoute: 'Movements',
+            role: 'client'
         }
     }
 
@@ -66,7 +68,7 @@
     const validateParams = async () => {
         if(formUser.value.user !== "" && formUser.value.password !== ""){
             msj_errors.value = ''
-            let response = await loginApi(currentConfig.endpoint, {
+            let response = await postApi(currentConfig.endpoint, {
                 [currentConfig.field.identifier]: formUser.value.user, 
                 [currentConfig.field.secret]: md5(formUser.value.password)
             });
@@ -91,8 +93,7 @@
         const token = response.res.headers.get('authorization')
         const tokenDecode = jwtDecode(token);
         authStore.setToken(token)
-        authStore.setUser({name: tokenDecode["nombre"], lastName: tokenDecode["apellido"], access_name: formUser.value.user})
-        // router.push({name: 'Dashboard'})
-        router.push({name: currentConfig.initRoute})
+        authStore.setUser({name: tokenDecode["nombre"], lastName: tokenDecode["apellido"], access_name: formUser.value.user, role: currentConfig.role})
+        router.replace({name: currentConfig.initRoute})
     }
 </script>
