@@ -9,7 +9,7 @@
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-gray-950/50 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+                <button @click="goRoute(item.route)" v-for="item in navigation" :key="item.name" :class="[item.current ? 'bg-gray-950/50 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</button>
               </div>
             </div>
           </div>
@@ -108,24 +108,41 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { authStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
+import { ref,onMounted} from 'vue'
 
-const props = defineProps(['title'])
+const props = defineProps(['currentRoute'])
 const router = useRouter();
+const userLog = authStore.user
 
+
+let title= ref('')
+let navigation = ref([])
+
+onMounted(() =>{
+  if(authStore.user.role == 'admin'){
+    navigation.value = [{ name: 'Users', route: 'Users', current: false }]
+    title.value = "Admin Dashboard"
+  }else{
+    navigation.value = [{ name: 'Movements', route: 'Movements', current: false}]
+    title.value = "Dashboard"
+  }
+})
 // cambiar la imagen por un icono
 const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
-const userLog = authStore.user
 
-const navigation = [
-//   { name: 'Dashboard 2', href: '#', current: true },
-//   { name: 'Team', href: '#', current: false },
-//   { name: 'Projects', href: '#', current: false },
-//   { name: 'Calendar', href: '#', current: false },
-//   { name: 'Reports', href: '#', current: false },
-]
+
+
+// const navigation = [
+//   { name: 'Dashboard 2', route: 'Users', current: true },
+//   // { name: 'Team', route: '#', current: false },
+//   // { name: 'Projects', route: '#', current: false },
+//   // { name: 'Calendar', route: '#', current: false },
+//   // { name: 'Reports', route: '#', current: false },
+// ]
+
 const userNavigation = [
 //   { name: 'Your profile', href: '#' },
 //   { name: 'Settings', href: '#' },
@@ -136,4 +153,12 @@ const logOut = () =>{
   authStore.logout();
   router.replace({name: 'Login'})
 }
+
+const goRoute = (route) => {
+  if(typeof route === 'string' && route != ''){
+    console.log(`go route ${route}`);
+    router.push({name: route})
+  }
+}
+
 </script>
