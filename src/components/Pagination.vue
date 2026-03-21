@@ -73,13 +73,13 @@ const countItems = computed(() => {
         return {
             prevItems: props.paginate.totalItems - props.itemsCount + 1,
             currentTotal: props.paginate.totalItems,
-            pages: doPageButton(props.paginate.totalPages, props.paginate.page)
+            pages: calculatePages(props.paginate.totalPages, props.paginate.page)
         }
     }else {
         return {
             prevItems: props.paginate.page == 1 ? 1 : (props.itemsCount * (props.paginate.page-1)) + 1,
             currentTotal: props.paginate.page == 1 ? props.itemsCount : (props.itemsCount * props.paginate.page),
-            pages: doPageButton(props.paginate.totalPages, props.paginate.page)
+            pages: calculatePages(props.paginate.totalPages, props.paginate.page)
         } 
     }
     
@@ -104,42 +104,23 @@ const prevPage = () => {
     emit('changePaginate', {page: props.paginate.page - 1})
 }
 
-const doPageButton= (totalPages,currentPage) =>{
-    if(totalPages <= 7){
-        return Array.from({length: totalPages}, (v, page) => page+1)
+
+const calculatePages = (total, current)=>{
+    // Caso 1: 7 páginas o menos
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    // Caso 2: Cerca del inicio (1, 2, 3,4,5)
+    if (current <= 5) return [1, 2, 3, 4, 5, '...', total];
+
+    // Caso 3: Cerca del final (ajustado para que no sobre la última elipsis)
+    // Si la página actual es 96 de 100, mostrará [1, '...', 96, 97, 98, 99, 100]
+    if (current >= total - 4) {
+        const lastPages = Array.from({ length: 5 }, (_, i) => total - 4 + i);
+        return [1, '...', ...lastPages];
     }
-    return doTotalPagination(totalPages, currentPage)    
-}
 
-const headPagination = (currentPage) => {
-  if(currentPage> 3){
-    return [1,space]
-  }else{
-    return Array.from({length: currentPage-1}, (v, page) => page +1)
-  }
-}
-
-const middlePagination =(lastPage, currentPage)=>{
-  if((lastPage-currentPage) > 3){
-    return Array.from({length: 3}, (v, page) => currentPage+page)
-  }
-  return Array.from({length: 3}, (v, page) => (lastPage-1)-page).reverse()
-  
-}
-
-const doTailPagination = (lastPage, currentPage) =>{
-  if((lastPage-currentPage)>3){
-    return [space, lastPage]
-  }else{
-    return [lastPage]
-  }
-}
-
-const doTotalPagination = (lastPage, currentPage)=>{
-  const headP = headPagination(currentPage)
-  const tailP = doTailPagination(lastPage, currentPage)
-  const middleP = middlePagination(lastPage,currentPage)
-  return headP.concat(middleP).concat(tailP)
+    // Caso 4: En el medio
+    return [1, '...', current, current + 1, current + 2, '...', total];
 }
 
 
