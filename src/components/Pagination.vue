@@ -43,6 +43,11 @@
                 :class="{'bg-indigo-500': page === paginate.page, 'hover:bg-white/5' : page != paginate.page && typeof page == 'number' }"
                 @click="clickPage(page)"
                 class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 focus:z-20 focus:outline-offset-0">{{ page }}</button>
+
+                <!-- <button @click="clickPage(paginate.page)" aria-current="page" class="relative bg-indigo-500 inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 focus:z-20 focus:outline-offset-0">{{ paginate.page }}</button> -->
+
+                <!-- <button @click="clickPage(paginate.page)" disabled ="page" class="relative  inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-200 inset-ring inset-ring-gray-700 focus:z-20 focus:outline-offset-0">...</button> -->
+                <!-- <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 inset-ring inset-ring-gray-700 focus:outline-offset-0">...</span> -->
                 <button @click="nextPage()" v-if="paginate.totalPages > paginate.page" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 inset-ring inset-ring-gray-700 hover:bg-white/5 focus:z-20 focus:outline-offset-0">
                     <span class="sr-only">Next </span>
                     <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
@@ -59,23 +64,22 @@
 </template>
 <script setup>
 
-import {ref, computed, onMounted} from 'vue'
+import {computed} from 'vue'
 const props = defineProps(['paginate', 'itemsCount'])
 const emit = defineEmits(['changePaginate'])
-
+const space = "..."
 const countItems = computed(() => {
     if (props.paginate.totalPages == props.paginate.page){
         return {
             prevItems: props.paginate.totalItems - props.itemsCount + 1,
             currentTotal: props.paginate.totalItems,
-            pages: props.paginate.totalPages
+            pages: doPageButton(props.paginate.totalPages, props.paginate.page)
         }
     }else {
         return {
             prevItems: props.paginate.page == 1 ? 1 : (props.itemsCount * (props.paginate.page-1)) + 1,
             currentTotal: props.paginate.page == 1 ? props.itemsCount : (props.itemsCount * props.paginate.page),
-            pages: Math.round(props.paginate.totalItems / props.itemsCount)
-
+            pages: doPageButton(props.paginate.totalPages, props.paginate.page)
         } 
     }
     
@@ -89,7 +93,7 @@ const clickPage = (newPage) => {
 }
 
 const nextPage = () => {
-    console.log(`change next page from ${props.paginate.page} to ${props.paginate.page +1 }`)
+    console.log(`change next page from ${props.paginate.page} to ${props.paginate.page + 1 }`)
     emit('changePaginate', {page: props.paginate.page + 1})
 }
 
@@ -100,6 +104,43 @@ const prevPage = () => {
     emit('changePaginate', {page: props.paginate.page - 1})
 }
 
+const doPageButton= (totalPages,currentPage) =>{
+    if(totalPages <= 7){
+        return Array.from({length: totalPages}, (v, page) => page+1)
+    }
+    return doTotalPagination(totalPages, currentPage)    
+}
 
-// falta prevenir que si hay mas de 6 paginas, que solo imprima las primeras 3 y las ultimas tres y en medio ponga puntos suspensivos
+const headPagination = (currentPage) => {
+  if(currentPage> 3){
+    return [1,space]
+  }else{
+    return Array.from({length: currentPage-1}, (v, page) => page +1)
+  }
+}
+
+const middlePagination =(lastPage, currentPage)=>{
+  if((lastPage-currentPage) > 3){
+    return Array.from({length: 3}, (v, page) => currentPage+page)
+  }
+  return Array.from({length: 3}, (v, page) => (lastPage-1)-page).reverse()
+  
+}
+
+const doTailPagination = (lastPage, currentPage) =>{
+  if((lastPage-currentPage)>3){
+    return [space, lastPage]
+  }else{
+    return [lastPage]
+  }
+}
+
+const doTotalPagination = (lastPage, currentPage)=>{
+  const headP = headPagination(currentPage)
+  const tailP = doTailPagination(lastPage, currentPage)
+  const middleP = middlePagination(lastPage,currentPage)
+  return headP.concat(middleP).concat(tailP)
+}
+
+
 </script>   
