@@ -13,6 +13,7 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
+  base: '/account_dashboard/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
