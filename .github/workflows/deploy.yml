@@ -5,6 +5,9 @@ on:
     branches:
       - main # Cambia a 'master' si es el nombre de tu rama principal
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Esto soluciona el Warning
+
 permissions:
   contents: write
 
@@ -32,6 +35,8 @@ jobs:
 
       - name: Build 🏗️
         run: pnpm run build
+        env: 
+            VITE_BASE_URL: ${{secrets.VITE_BASE_URL}}
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
