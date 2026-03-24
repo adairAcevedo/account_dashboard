@@ -89,6 +89,14 @@ VITE_API_BASE_URL=https://your-api.com/api
 pnpm dev
 ```
 
+client path login
+```
+/login
+```
+admin path login
+```
+/login-admin
+```
 ------------------------------------------------------------------------
 
 ## 🏗️ Project Structure
