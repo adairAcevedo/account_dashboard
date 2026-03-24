@@ -19,7 +19,6 @@ export const postApi = async (endpoint, data, headers = {}) => {
         console.log(err);
         return {errorMsj: "Service not available ", status: err};
     }finally{
-        console.log("finish post request")
     }
 }
 
@@ -44,7 +43,6 @@ export const get = async (endpoint, query = {}, headers = {}) => {
     }catch(err){
         return {errorMsj: "Service not available ", status: err};
     }finally{
-        console.log("finish get request")
     }
 }
 

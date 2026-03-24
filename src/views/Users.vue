@@ -4,8 +4,8 @@
       <h2 class="text-lg text-red-300">{{ errorMsj }}</h2>
     </div>
     
-    <UserList :users="users" class="max-w-7xl" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort" @go-item="handleGoUser"/>
-    <Pagination :paginate="pagination" class="max-w-7xl" @change-paginate="handleChangePage" :itemsCount="users.length" />
+    <UserList :users="users" class="max-w-8xl" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort" @go-item="handleGoUser"/>
+    <Pagination :paginate="pagination" class="max-w-8xl" @change-paginate="handleChangePage" :itemsCount="users.length" />
   </BaseLayout>
 </template>
 

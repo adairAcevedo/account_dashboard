@@ -156,7 +156,6 @@ const logOut = () =>{
 
 const goRoute = (route) => {
   if(typeof route === 'string' && route != ''){
-    console.log(`go route ${route}`);
     router.push({name: route})
   }
 }
