@@ -5,7 +5,7 @@
     </div>
     
     <Movements :movements="movements" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort"/>
-    <Pagination :paginate="pagination" @change-paginate="handleChangePage" :itemsCount="movements.length" />
+    <Pagination class="max-w-4xl" :paginate="pagination" @change-paginate="handleChangePage" :itemsCount="movements.length" />
   </BaseLayout>
 </template>
 
