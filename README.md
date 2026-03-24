@@ -1,6 +1,6 @@
 # 📊 Movement Visualization System (Admin & Client)
 
-**Live Demo:** https://adairacevedo.github.io/account_dashboard/#/login
+**Live Demo:** https://adairacevedo.github.io/account_dashboard/#/login-admin
 
 Single Page Application (SPA) built with **Vue 3 + Vite** for managing
 and visualizing financial movements with **role-based access control**.
@@ -91,14 +91,6 @@ VITE_API_BASE_URL=https://your-api.com/api
 pnpm dev
 ```
 
-client path login
-```
-/login
-```
-admin path login
-```
-/login-admin
-```
 ------------------------------------------------------------------------
 
 ## 🏗️ Project Structure
@@ -135,3 +127,21 @@ admin path login
 -   Review **navigation guards** for security handling
 -   Observe separation between **admin vs client responsibilities**
 
+------------------------------------------------------------------------
+
+## 🔑 Demo Credentials
+
+
+Admin:
+- path [/login-admin](https://adairacevedo.github.io/account_dashboard/#/login-admin)
+- Email: admin
+- Password: pruebatest123
+
+Client:
+- path: [/login](https://adairacevedo.github.io/account_dashboard/#/login)
+- Email: any user email
+- Password: pruebatest123
+
+
+## Requirement description
+- [link](requirements.md)
