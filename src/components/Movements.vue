@@ -31,7 +31,7 @@
                 </div>
               </div>
               <div class="col-span-3">
-                <p class="mt-1 text-xs/5 text-white dark:text-gray-400">{{movement.created_at}}
+                <p class="mt-1 text-xs/5 text-white dark:text-gray-400">{{ formatDate(movement.created_at)}}
                 </p>
               </div>
               <div class="col-span-3 text-right">
@@ -46,7 +46,7 @@
 <script setup>
 const props = defineProps(['movements', 'sortList', 'isLoading'])
 const emit = defineEmits(['changeSort']);
-import { centsToUnits } from '@/utils/methods';
+import { centsToUnits, formatDate } from '@/utils/methods';
 import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
 
 // const sort = ref({field: 'created_at', direction: 'desc'})
