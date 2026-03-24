@@ -52,3 +52,13 @@ export const centsToUnits = (amount) => {
     return (amount /100).toFixed(2)
 }
 
+export const formatDate = (dateISO, dateStyle = 'medium') => {
+  if (!dateISO) return '';
+  const date = new Date(dateISO);
+  
+  return new Intl.DateTimeFormat('en-US', {
+    //es-ES
+    dateStyle: dateStyle, // 'short', 'medium', 'long', 'full'
+    timeStyle: 'short' 
+  }).format(date);
+};
