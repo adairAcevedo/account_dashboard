@@ -60,3 +60,16 @@ export const formatDate = (dateISO, dateStyle = 'medium') => {
     timeStyle: 'short' 
   }).format(date);
 };
+
+
+export const convertionCurrency = ({amount: amount,base_currency: base_currency, current_currency: current_currency, currencies: currencies,exchangesCurrencies: exchangesCurrencies}) => {
+    if(base_currency === current_currency){
+        return `$ `+ centsToUnits(amount)
+    }
+    if(Object.hasOwn(currencies,current_currency)){
+        const keyCurrency = currencies[current_currency].key
+        return `$ `+centsToUnits(amount * exchangesCurrencies[keyCurrency])
+    }
+    console.log('Not found exchange currency', exchangesCurrencies)
+    return "error convertion"
+}
