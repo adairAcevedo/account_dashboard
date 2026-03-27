@@ -21,7 +21,14 @@ import { userMovementsURL } from '@/utils/endpoints';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useAdminStore } from '@/stores/adminStore';
 
-onMounted(async () => await getMovements())
+import { moneyConversionURL } from '@/utils/endpoints';
+import {useCurrentConfigStore} from '@/stores/configStore';
+const currentConfigStore = useCurrentConfigStore();
+
+onMounted(async () => {
+  getExchangeCurrencies()
+  await getMovements()
+})
 onBeforeRouteLeave((to, from) => {
     if(to.name !== 'MovementsByUser'){
         adminStore.clearSelectedUser();
@@ -110,6 +117,28 @@ const handleChangePage = (updatePage) => {
   })
 }
 
+
+const getExchangeCurrencies = async () =>{
+  if(Object.keys(currentConfigStore.currenciesConversion).length === 0){ 
+    console.log('voy por las exchance currency')
+    let response = await get(moneyConversionURL)
+    validGetExchange(response)
+  }else{
+    console.log('ya las tengo en localStorage las exchance currency')
+    console.log(currentConfigStore.currenciesConversion) 
+  }
+} 
+
+const validGetExchange =(response) =>{
+  if(response instanceof Error){
+    return 0;
+  }
+  if(Object.hasOwn(response, 'errorMsj')){
+    return 0;
+  }
+  currentConfigStore.setExchanceCurrencies(response.res)
+  console.log(currentConfigStore.currenciesConversion)
+}
 
 
 </script>
