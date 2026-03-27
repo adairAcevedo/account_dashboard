@@ -35,7 +35,7 @@
                 </p>
               </div>
               <div class="col-span-3 text-right">
-                <p class="text-sm/6 text-white">$ {{ centsToUnits(movement.amount) }}</p>
+                <p class="text-sm/6 text-white"> {{ getAmount(movement.amount) }}</p>
               </div>
             </li>
           </ul>
@@ -46,8 +46,12 @@
 <script setup>
 const props = defineProps(['movements', 'sortList', 'isLoading'])
 const emit = defineEmits(['changeSort']);
-import { centsToUnits, formatDate } from '@/utils/methods';
+import { centsToUnits, formatDate, convertionCurrency } from '@/utils/methods';
 import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
+import {computed, onMounted} from 'vue'
+
+import {useCurrentConfigStore} from '@/stores/configStore'
+const currenConfigStore = useCurrentConfigStore();
 
 // const sort = ref({field: 'created_at', direction: 'desc'})
 const sortNextDirections = {
@@ -69,6 +73,9 @@ const getDirectionValue = (field) => {
   return 'desc'
 }
 
+const getAmount = (amount) => {
+  return convertionCurrency({amount: amount,base_currency: currenConfigStore.baseCurrency, current_currency: currenConfigStore.selectedCurrency,currencies: currenConfigStore.currencies, exchangesCurrencies: currenConfigStore.currenciesConversion})
+}
 // make a component, to represente arrows funcionality
 // make a fade card to represent data loading
 </script>
