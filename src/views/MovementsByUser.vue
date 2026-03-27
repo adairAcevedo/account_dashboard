@@ -119,14 +119,16 @@ const handleChangePage = (updatePage) => {
 
 
 const getExchangeCurrencies = async () =>{
-  if(Object.keys(currentConfigStore.currenciesConversion).length === 0){ 
-    console.log('voy por las exchance currency')
-    let response = await get(moneyConversionURL)
-    validGetExchange(response)
-  }else{
-    console.log('ya las tengo en localStorage las exchance currency')
-    console.log(currentConfigStore.currenciesConversion) 
-  }
+  // if(Object.keys(currentConfigStore.currenciesConversion).length === 0){ 
+  //   console.log('voy por las exchance currency')
+  //   let response = await get(moneyConversionURL)
+  //   validGetExchange(response)
+  // }else{
+  //   console.log('ya las tengo en localStorage las exchance currency')
+  //   console.log(currentConfigStore.currenciesConversion) 
+  // }
+  let response = await get(moneyConversionURL)
+  validGetExchange(response)
 } 
 
 const validGetExchange =(response) =>{
