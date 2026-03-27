@@ -72,39 +72,29 @@ const countItems = computed(() => {
 
 const clickPage = (newPage) => {
     if(props.paginate.page != newPage && typeof newPage == 'number'){
-        console.log(`change page from ${props.paginate.page} to ${newPage}`)
         emit('changePaginate', {page: newPage})
     }
 }
 
 const nextPage = () => {
-    console.log(`change next page from ${props.paginate.page} to ${props.paginate.page + 1 }`)
     emit('changePaginate', {page: props.paginate.page + 1})
 }
 
 const prevPage = () => {
-
-    console.log(`change prev page from ${props.paginate.page} to ${props.paginate.page - 1 }`)
-
     emit('changePaginate', {page: props.paginate.page - 1})
 }
 
 
 const calculatePages = (total, current)=>{
-    // Caso 1: 7 páginas o menos
     if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
-    // Caso 2: Cerca del inicio (1, 2, 3,4,5)
     if (current <= 5) return [1, 2, 3, 4, 5, '...', total];
-
-    // Caso 3: Cerca del final (ajustado para que no sobre la última elipsis)
-    // Si la página actual es 96 de 100, mostrará [1, '...', 96, 97, 98, 99, 100]
+    
     if (current >= total - 4) {
         const lastPages = Array.from({ length: 5 }, (_, i) => total - 4 + i);
         return [1, '...', ...lastPages];
     }
 
-    // Caso 4: En el medio
     return [1, '...', current, current + 1, current + 2, '...', total];
 }
 
