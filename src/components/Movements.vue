@@ -53,16 +53,15 @@ import {computed, onMounted} from 'vue'
 import {useCurrentConfigStore} from '@/stores/configStore'
 const currenConfigStore = useCurrentConfigStore();
 
-// const sort = ref({field: 'created_at', direction: 'desc'})
+
 const sortNextDirections = {
   desc: 'asc',
   asc: 'desc'
 }
 
 const clickSort = (field) => {
-  // call to parent component
+
   let directionValue = getDirectionValue(field)
-  console.log(`child update sort ${field} - ${directionValue}`)
   emit('changeSort', {field: field, direction: directionValue})
 }
 
