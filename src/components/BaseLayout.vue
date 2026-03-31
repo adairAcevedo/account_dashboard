@@ -27,7 +27,7 @@
               <Menu as="div" class="relative ml-3">
                 <MenuButton class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                   <span class="absolute -inset-1.5"></span>
-                  <span class="text-white text-upcase">{{ currentCurrency}}</span>
+                  <span class="text-white text-upcase uppercase">{{ currentCurrency}}</span>
                   <!-- <img class="size-8 rounded-full outline -outline-offset-1 outline-white/10" :src="user.imageUrl" alt="" /> -->
                 </MenuButton>
 
@@ -39,7 +39,7 @@
                     <MenuItem v-for="currency in currencies" v-slot="{
                       active
                     }">
-                      <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" @click="changeCurency(currency)">
+                      <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 uppercase" @click="changeCurency(currency)">
                         {{currency}}
                       </button>
                       
@@ -70,7 +70,7 @@
                     </MenuItem>
                     <MenuItem>
                       <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" @click="logOut()">
-                        Logout
+                        {{t("logout")}}
                       </button>
                       
                     </MenuItem>
@@ -113,7 +113,7 @@
           <div class="mt-3 space-y-1 px-2">
             <!-- <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">{{ item.name }}</DisclosureButton> -->
             <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="logOut()">
-                            Logout
+                            {{t("logout")}}
              </DisclosureButton>
           </div>
         </div>
@@ -142,6 +142,8 @@ import { authStore } from '@/stores/authStore'
 import { useCurrentConfigStore } from '@/stores/configStore'
 import { useRouter } from 'vue-router'
 import { ref,onMounted, computed} from 'vue'
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n()
 
 const props = defineProps(['currentRoute'])
 const router = useRouter();
@@ -164,11 +166,11 @@ let navigation = ref([])
 
 onMounted(() =>{
   if(authStore.user.role == 'admin'){
-    navigation.value = [{ name: 'Users', route: 'Users', current: false }]
-    title.value = "Admin Dashboard"
+    navigation.value = [{ name: t('users'), route: 'Users', current: false }]
+    title.value = t("admin.dashboard")
   }else{
-    navigation.value = [{ name: 'Movements', route: 'Movements', current: false}]
-    title.value = "Dashboard"
+    navigation.value = [{ name: t('movements'), route: 'Movements', current: false}]
+    title.value = t("dashboard")
   }
 })
 // cambiar la imagen por un icono

@@ -1,10 +1,12 @@
 {
-    "language": "Language",
-    "email": "email",
-    "username": "nombre de usuario",
-    "password": "password",
-    "send": "send",
-    "hello": "hello world!",
-    "Usuario o password incorrectos": "incorrect user or password",
-    "invalid_credentials": "Credentials are invalids"
+    "email": "Email",
+    "username": "User",
+    "password": "Password",
+    "send": "Send",
+    "Usuario o password incorrectos": "Incorrect user or password",
+    "invalid_credentials": "Credentials are invalids",
+    "dashboard": "Dashboard",
+    "admin.dashboard": "Admin Dashboard",
+    "welcome.index": "Welcome",
+    "logout": "Logout"
 }
