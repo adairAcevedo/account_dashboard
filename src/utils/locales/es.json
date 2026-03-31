@@ -1,0 +1,11 @@
+{
+    "language": "Language",
+    "email": "correo",
+    "login": "iniciar sesion",
+    "username": "nombre de usuario",
+    "password": "contraseña",
+    "send": "enviar",
+    "hello": "hola mundo",
+    "Usuario o password incorrectos": "Usuario o password incorrectos",
+    "invalid_credentials": "Credenciales invalidas"
+}
