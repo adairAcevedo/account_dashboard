@@ -5,6 +5,8 @@ const currencies = {
 	"mxn": {convertion_key: 'usd', key: 'usd2mxn', symbol: "$"}
 }
 
+export const languages = ["en","es"]
+export const baseLanguage = "es"
 const baseCurrency = "mxn";
 export const useCurrentConfigStore = defineStore('currentConfig', {
     state: () => ({
@@ -12,6 +14,7 @@ export const useCurrentConfigStore = defineStore('currentConfig', {
         selectedCurrency: localStorage.getItem('selected_currency') || baseCurrency,
         currencies: currencies,
         currenciesConversion: localStorage.getItem('exchange_currencies') || {},
+        selectedLanguage: localStorage.getItem('selected_language') || baseLanguage
     }),
     actions: {
         setSelectedCurrency(currency){
@@ -28,6 +31,14 @@ export const useCurrentConfigStore = defineStore('currentConfig', {
                 localStorage.setItem('exchange_currencies', currencies)
             }else{
                 localStorage.removeItem('exchange_currencies')
+            }
+        },
+        setSelectedLanguage(language){
+            this.selectedLanguage = language
+            if(language){
+                localStorage.setItem('selected_language', language)
+            }else{
+                localStorage.setItem('selected_language', baseLanguage)
             }
         }
     }

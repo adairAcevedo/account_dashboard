@@ -73,3 +73,9 @@ export const convertionCurrency = ({amount: amount,base_currency: base_currency,
     console.log('Not found exchange currency', exchangesCurrencies)
     return "error convertion"
 }
+
+export const changeLanguage = ({currentLanguage: currentLanguage,languages: languages}) =>{
+
+    const listLanguages = languages.filter(language => language !== currentLanguage)
+    return listLanguages[0]
+}
