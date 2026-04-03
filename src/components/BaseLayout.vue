@@ -154,11 +154,11 @@ const currencies = computed(() =>{
 
 
 let title = computed(() =>   
-  navigation.value == 'admin' ? t("admin.dashboard") : t("admin.dashboard")
+  authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
 )
 
 let navigation = computed(() =>   
-  navigation.value == 'admin' ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
+  authStore.user.role == 'admin' ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
 )
 
 onMounted(() =>{})
