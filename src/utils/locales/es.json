@@ -11,5 +11,21 @@
     "users": "Usuarios",
     "movements": "Movimientos",
     "welcome.index": "Bienvenido",
-    "logout": "Salir"
+    "logout": "Salir",
+    "users.name": "Nombre",
+    "users.second_name": "Segundo nombre",
+    "users.last_name": "Apellido paterno",
+    "users.second_last_name": "Apellido materno",
+    "users.created_at": "Fecha de creación",
+    "users.status": "Estado",
+    "users.active": "Activo",
+    "users.inactive": "Inactivo",
+    "users.show.title": "Movimientos de :",
+    "movements.description": "Descripción",
+    "movements.date": "Fecha",
+    "movements.amount": "Monto",
+    "paginator.show": "Mostrando",
+    "paginator.to": " al ",
+    "paginator.of": " de ",
+    "paginator.results":"resultados"
 }

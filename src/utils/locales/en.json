@@ -9,5 +9,21 @@
     "admin.dashboard": "Admin Dashboard",
     "welcome.index": "Welcome",
     "logout": "Logout",
-    "movements": "Movements"
+    "movements": "Movements",
+    "users.name": "Name",
+    "users.second_name": "Second name",
+    "users.last_name": "Last name",
+    "users.second_last_name": "Second last name",
+    "users.created_at": "Created at",
+    "users.status": "Status",
+    "users.active": "Active",
+    "users.inactive": "Inactive",
+    "users.show.title": "Movements of :",
+    "movements.description": "Description",
+    "movements.date": "Date",
+    "movements.amount": "Amount",
+    "paginator.show": "Showing",
+    "paginator.to": " to ",
+    "paginator.of": " of ",
+    "paginator.results": "results"
 }
