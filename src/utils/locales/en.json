@@ -8,5 +8,6 @@
     "dashboard": "Dashboard",
     "admin.dashboard": "Admin Dashboard",
     "welcome.index": "Welcome",
-    "logout": "Logout"
+    "logout": "Logout",
+    "movements": "Movements"
 }
