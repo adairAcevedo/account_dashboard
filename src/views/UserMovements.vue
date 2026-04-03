@@ -14,10 +14,13 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import Movements from '@/components/Movements.vue';
 import Pagination from '@/components/Pagination.vue';
 import { authStore } from '@/stores/authStore';
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import { get } from '@/utils/methods';
 import { clientMovementsURL, moneyConversionURL } from '@/utils/endpoints';
 import {useCurrentConfigStore} from '@/stores/configStore';
+import { useI18n } from 'vue-i18n';
+
+const {t} = useI18n();
 const currentConfigStore = useCurrentConfigStore();
 
 onMounted(async () => {
@@ -25,7 +28,7 @@ onMounted(async () => {
   await getMovements()
 })
 
-let title = ref("Movements")
+let title = computed(() => t("movements"))
 let errorMsj = ref("");
 let isLoading = ref(true);
 let movements = ref([]);

@@ -132,7 +132,7 @@ import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n()
 import { changeLanguage } from '@/utils/methods'
 
-const props = defineProps(['currentRoute'])
+const props = defineProps(['currentRoute', 'title'])
 const router = useRouter();
 const currentConfigStore = useCurrentConfigStore();
 const userLog = authStore.user
@@ -153,9 +153,9 @@ const currencies = computed(() =>{
 });
 
 
-let title = computed(() =>   
-  authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
-)
+// let title = computed(() =>   
+//   authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
+// )
 
 let navigation = computed(() =>   
   authStore.user.role == 'admin' ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
