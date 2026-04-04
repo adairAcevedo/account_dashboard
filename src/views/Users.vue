@@ -15,17 +15,18 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 
 import { authStore } from '@/stores/authStore';
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import { get } from '@/utils/methods';
 import { usersURL } from '@/utils/endpoints';
 import UserList from '@/components/UserList.vue';
 import { useAdminStore } from '@/stores/adminStore';
-
+import { useI18n } from 'vue-i18n';
 import router from '@/router/routes';
 onMounted(async () => await getUsers())
 
+const {t} = useI18n()
 const adminStore = useAdminStore();
-let title = ref("Users")
+let title = computed(()=> t("users"))
 let errorMsj = ref("");
 let isLoading = ref(true);
 let users = ref([]);
@@ -106,7 +107,4 @@ const handleGoUser = ({item: user}) =>{
   adminStore.setSelectedUser(user)
   router.push({name: 'MovementsByUser', params: {id: user.uid}})
 }
-
-
-
 </script>

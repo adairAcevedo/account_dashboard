@@ -14,18 +14,25 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import Movements from '@/components/Movements.vue';
 import Pagination from '@/components/Pagination.vue';
 import { authStore } from '@/stores/authStore';
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import { get } from '@/utils/methods';
-import { clientMovementsURL } from '@/utils/endpoints';
+import { clientMovementsURL, moneyConversionURL } from '@/utils/endpoints';
+import {useCurrentConfigStore} from '@/stores/configStore';
+import { useI18n } from 'vue-i18n';
 
-onMounted(async () => await getMovements())
+const {t} = useI18n();
+const currentConfigStore = useCurrentConfigStore();
 
-let title = ref("Movements")
+onMounted(async () => {
+  getExchangeCurrencies()
+  await getMovements()
+})
+
+let title = computed(() => t("movements"))
 let errorMsj = ref("");
 let isLoading = ref(true);
 let movements = ref([]);
 
-// renombrar los campos
 let pagination = ref({
 		page: 1,
 		totalPages: 1,
@@ -73,7 +80,6 @@ const validGetMovements = (response) =>{
 }
 
 const handleChangeSort = (updateSort) => {
-  console.log('updateSort value ',updateSort)
   isLoading.value = true
 
   getMovements(
@@ -88,7 +94,6 @@ const handleChangeSort = (updateSort) => {
 }
 
 const handleChangePage = (updatePage) => {
-  console.log('update Page', updatePage)
   isLoading.value = true;
   
   getMovements({
@@ -98,6 +103,20 @@ const handleChangePage = (updatePage) => {
   })
 }
 
+const getExchangeCurrencies = async () =>{
+  let response = await get(moneyConversionURL)
+  validGetExchange(response)
+}
+
+const validGetExchange =(response) =>{
+  if(response instanceof Error){
+    return 0;
+  }
+  if(Object.hasOwn(response, 'errorMsj')){
+    return 0;
+  }
+  currentConfigStore.setExchanceCurrencies(response.res)
+}
 
 
 </script>

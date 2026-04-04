@@ -2,7 +2,7 @@
   <BaseLayout :title="title">
     <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
       <h2 class="text-lg text-red-300">{{ errorMsj }}</h2>
-      <h1 class="text-lg dark:text-white">Movements of: {{ user.email }}</h1>
+      <h1 class="text-lg dark:text-white">{{ t('user') }}: {{ user.email }}</h1>
     </div>
     
     <Movements :movements="movements" :isLoading="isLoading" :sortList="sort" @change-sort="handleChangeSort"/>
@@ -15,13 +15,22 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import Movements from '@/components/Movements.vue';
 import Pagination from '@/components/Pagination.vue';
 import { authStore } from '@/stores/authStore';
-import {ref, onMounted} from 'vue'
+import {ref, computed,onMounted} from 'vue'
 import { get } from '@/utils/methods';
 import { userMovementsURL } from '@/utils/endpoints';
 import { onBeforeRouteLeave } from 'vue-router';
 import { useAdminStore } from '@/stores/adminStore';
+import { moneyConversionURL } from '@/utils/endpoints';
+import {useCurrentConfigStore} from '@/stores/configStore';
+import { useI18n } from 'vue-i18n';
 
-onMounted(async () => await getMovements())
+const {t} = useI18n();
+const currentConfigStore = useCurrentConfigStore();
+
+onMounted(async () => {
+  getExchangeCurrencies()
+  await getMovements()
+})
 onBeforeRouteLeave((to, from) => {
     if(to.name !== 'MovementsByUser'){
         adminStore.clearSelectedUser();
@@ -32,12 +41,11 @@ onBeforeRouteLeave((to, from) => {
 const adminStore = useAdminStore();
 const user = adminStore.selectedUser;
 
-let title = ref("Movements")
+let title = computed(() => t("movements"))
 let errorMsj = ref("");
 let isLoading = ref(true);
 let movements = ref([]);
 
-// renombrar los campos
 let pagination = ref({
 		page: 1,
 		totalPages: 1,
@@ -110,6 +118,22 @@ const handleChangePage = (updatePage) => {
   })
 }
 
+
+const getExchangeCurrencies = async () =>{
+  let response = await get(moneyConversionURL)
+  validGetExchange(response)
+} 
+
+const validGetExchange =(response) =>{
+  if(response instanceof Error){
+    return 0;
+  }
+  if(Object.hasOwn(response, 'errorMsj')){
+    return 0;
+  }
+  currentConfigStore.setExchanceCurrencies(response.res)
+  console.log(currentConfigStore.currenciesConversion)
+}
 
 
 </script>

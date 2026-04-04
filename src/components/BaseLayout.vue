@@ -15,11 +15,31 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              <!-- <button type="button" class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-                <span class="absolute -inset-1.5"></span>
-                <span class="sr-only">View notifications</span>
-                <BellIcon class="size-6" aria-hidden="true" />
-              </button> -->
+              <div class="relative ml-3" @click="updateLanguage()">
+                  <span class="absolute -inset-1.5"></span>
+                  <span class="text-white text-upcase uppercase" >{{ currentLanguage}}</span>
+              </div>
+               <!-- currentCurrency dropdown -->
+              <Menu as="div" class="relative ml-3">
+                <MenuButton class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                  <span class="absolute -inset-1.5"></span>
+                  <span class="text-white text-upcase uppercase">{{ currentCurrency}}</span>
+                </MenuButton>
+
+                <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
+                  <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline-1 -outline-offset-1 outline-white/10">
+                    <MenuItem v-for="currency in currencies" v-slot="{
+                      active
+                    }">
+                      <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 uppercase" @click="changeCurency(currency)">
+                        {{currency}}
+                      </button>
+                      
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
+              <!--  -->
 
               <!-- Profile dropdown -->
               <Menu as="div" class="relative ml-3">
@@ -31,9 +51,6 @@
 
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 outline-1 -outline-offset-1 outline-white/10">
-                    <!-- <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                      <a :href="item.href" :class="[active ? 'bg-white/5 outline-hidden' : '', 'block px-4 py-2 text-sm text-gray-300']">{{ item.name }}</a>
-                    </MenuItem> -->
                     <MenuItem>
                         <div class="px-4 py-2 ">
                             <div class="text-base/5 font-medium text-white">{{ userLog.name }}</div>
@@ -42,7 +59,7 @@
                     </MenuItem>
                     <MenuItem>
                       <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" @click="logOut()">
-                        Logout
+                        {{t("logout")}}
                       </button>
                       
                     </MenuItem>
@@ -69,23 +86,20 @@
         </div>
         <div class="border-t border-white/10 pt-4 pb-3">
           <div class="flex items-center px-5">
-            <div class="shrink-0">
-              <img class="size-10 rounded-full outline -outline-offset-1 outline-white/10" :src="user.imageUrl" alt="" />
-            </div>
             <div class="ml-3">
               <div class="text-base/5 font-medium text-white">{{ userLog.name }}</div>
               <div class="text-sm font-medium text-gray-400">{{ userLog.access_name }}</div>
             </div>
-            <!-- <button type="button" class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-              <span class="absolute -inset-1.5"></span>
-              <span class="sr-only">View notifications</span>
-              <BellIcon class="size-6" aria-hidden="true" />
-            </button> -->
+            
           </div>
           <div class="mt-3 space-y-1 px-2">
-            <!-- <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">{{ item.name }}</DisclosureButton> -->
+            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="updateLanguage()">                
+                            {{currentLanguage}}
+             </DisclosureButton>
+          </div>
+          <div class="mt-3 space-y-1 px-2">
             <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="logOut()">
-                            Logout
+                            {{t("logout")}}
              </DisclosureButton>
           </div>
         </div>
@@ -105,59 +119,74 @@
 
 <script setup>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
+
+import {
+  Bars3Icon,
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
 import { authStore } from '@/stores/authStore'
+import { useCurrentConfigStore, languages } from '@/stores/configStore'
 import { useRouter } from 'vue-router'
-import { ref,onMounted} from 'vue'
+import { onMounted, computed} from 'vue'
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n()
+import { changeLanguage } from '@/utils/methods'
 
-const props = defineProps(['currentRoute'])
+const props = defineProps(['currentRoute', 'title'])
 const router = useRouter();
+const currentConfigStore = useCurrentConfigStore();
 const userLog = authStore.user
+const currentCurrency = computed(() =>{
+  return currentConfigStore.selectedCurrency;
+});
+
+const currentLanguage = computed(() =>{
+  return currentConfigStore.selectedLanguage;
+});
 
 
-let title= ref('')
-let navigation = ref([])
+const currencies = computed(() =>{
+  const globalCurrencies = currentConfigStore.currencies
+  return Object.keys(globalCurrencies).filter(c_currency =>
+    c_currency !== currentConfigStore.selectedCurrency
+  )
+});
 
-onMounted(() =>{
-  if(authStore.user.role == 'admin'){
-    navigation.value = [{ name: 'Users', route: 'Users', current: false }]
-    title.value = "Admin Dashboard"
-  }else{
-    navigation.value = [{ name: 'Movements', route: 'Movements', current: false}]
-    title.value = "Dashboard"
-  }
-})
-// cambiar la imagen por un icono
+
+// let title = computed(() =>   
+//   authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
+// )
+
+let navigation = computed(() =>   
+  authStore.user.role == 'admin' ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
+)
+
+onMounted(() =>{})
+
 const user = {
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
-
-
-
-// const navigation = [
-//   { name: 'Dashboard 2', route: 'Users', current: true },
-//   // { name: 'Team', route: '#', current: false },
-//   // { name: 'Projects', route: '#', current: false },
-//   // { name: 'Calendar', route: '#', current: false },
-//   // { name: 'Reports', route: '#', current: false },
-// ]
-
-const userNavigation = [
-//   { name: 'Your profile', href: '#' },
-//   { name: 'Settings', href: '#' },
-//   { name: 'Sign out', href: '#' },
-]
 
 const logOut = () =>{
   authStore.logout();
   router.replace({name: 'Login'})
 }
 
+const updateLanguage = () => {
+  const upLanguage = changeLanguage({languages: languages, currentLanguage: currentLanguage.value})
+  locale.value = upLanguage
+  currentConfigStore.setSelectedLanguage(upLanguage)
+}
+
 const goRoute = (route) => {
   if(typeof route === 'string' && route != ''){
     router.push({name: route})
   }
+}
+
+const changeCurency = (updateCurrency) => {
+  currentConfigStore.setSelectedCurrency(updateCurrency)
 }
 
 </script>

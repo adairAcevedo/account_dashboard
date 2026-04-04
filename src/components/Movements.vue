@@ -2,20 +2,20 @@
     <div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
       <div class="grid grid-cols-12 gap-x-6 px-0 py-3 border-b border-gray-200 dark:border-white/10">
         <div class="col-span-6 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('description')">
-          <p class="text-xs font-semibold uppercase tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">Descripciòn</p>
+          <p class="text-sm font-semibold tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t('movements.description')}}</p>
           <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'description'" />
           <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='description' && sortList.direction =='desc'"/>
           <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='description' && sortList.direction =='asc'"/>
         </div>
         <div class="col-span-3 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('created_at')">
-          <p class="text-xs font-semibold uppercase tracking-wider dark:text-white group-hover:text-gray-500 dark:text-gray-400">Fecha</p>
+          <p class="text-sm font-semibold tracking-wider dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{ t('movements.date') }}</p>
           <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'created_at'" />
           <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='created_at' && sortList.direction =='desc'"/>
           <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='created_at' && sortList.direction =='asc'"/>
 
         </div>
         <div class="col-span-3 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('amount')">
-          <p class="text-xs font-semibold uppercase tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">Monto</p>
+          <p class="text-sm font-semibold tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{ t('movements.amount') }}</p>
           <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'amount'"/>
           <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='amount' && sortList.direction =='desc'"/>
           <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='amount' && sortList.direction =='asc'"/>
@@ -35,7 +35,7 @@
                 </p>
               </div>
               <div class="col-span-3 text-right">
-                <p class="text-sm/6 text-white">$ {{ centsToUnits(movement.amount) }}</p>
+                <p class="text-sm/6 text-white"> {{ getAmount(movement.amount) }}</p>
               </div>
             </li>
           </ul>
@@ -46,19 +46,22 @@
 <script setup>
 const props = defineProps(['movements', 'sortList', 'isLoading'])
 const emit = defineEmits(['changeSort']);
-import { centsToUnits, formatDate } from '@/utils/methods';
+import {formatDate, convertionCurrency } from '@/utils/methods';
 import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
+import {useCurrentConfigStore} from '@/stores/configStore'
+import { useI18n } from 'vue-i18n';
 
-// const sort = ref({field: 'created_at', direction: 'desc'})
+const {t} = useI18n();
+const currenConfigStore = useCurrentConfigStore();
+
 const sortNextDirections = {
   desc: 'asc',
   asc: 'desc'
 }
 
 const clickSort = (field) => {
-  // call to parent component
+
   let directionValue = getDirectionValue(field)
-  console.log(`child update sort ${field} - ${directionValue}`)
   emit('changeSort', {field: field, direction: directionValue})
 }
 
@@ -69,6 +72,9 @@ const getDirectionValue = (field) => {
   return 'desc'
 }
 
+const getAmount = (amount) => {
+  return convertionCurrency({amount: amount,base_currency: currenConfigStore.baseCurrency, current_currency: currenConfigStore.selectedCurrency,currencies: currenConfigStore.currencies, exchangesCurrencies: currenConfigStore.currenciesConversion})
+}
 // make a component, to represente arrows funcionality
 // make a fade card to represent data loading
 </script>

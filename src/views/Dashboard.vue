@@ -1,17 +1,17 @@
 <template>
-  <BaseLayout title="" >
+  <BaseLayout :title="title" >
     <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-      <h2 class="text-lg text-red-300">{{ errorMsj }}</h2>
-      <h1 class="text-white">Welcome</h1>
+      <h1 class="text-white">{{t("welcome.index")}}</h1>
     </div>
   </BaseLayout>
 </template>
 <script setup>
 import BaseLayout from '@/components/BaseLayout.vue';
+import { useI18n } from 'vue-i18n';
+const {t, locale} = useI18n()
 
-import {onMounted} from "vue"
-// get the current route to mark current with true
-const navigation = [{ name: 'Users', route: 'Users', current: false }]
-// let title= ref('')
+let title = computed(() =>   
+  authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
+)
 
 </script>
