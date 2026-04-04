@@ -12,9 +12,7 @@ users and their accounts can be viewed.
 
 ## 🛠️ What should I do?
 
-- Create a frontend web application using your preferred library or framework:
-
-- jQuery, Angular, React, Vue, Backbone, etc.
+- Create a frontend web application
 
 ------------------------------------------------------------------------
 
@@ -56,3 +54,5 @@ All lists must include:
 
 - **Pagination**
 - **Sort by any column**
+- **Add internacionalization**
+- **Add choose currency in mxn or usd**

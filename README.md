@@ -37,6 +37,12 @@ and visualizing financial movements with **role-based access control**.
     Access detailed transaction history per user while preserving state
     after refresh.
 
+-   **Multi-language Support (i18n)**\
+    Full internationalization for titles and fields in English and Spanish, ensuring a localized experience for different regions.
+
+-   **Dynamic Currency Conversion**\
+    Automated MXN to USD conversion using real-time exchange rates fetched from the user API, with MXN as the base currency.
+
 ------------------------------------------------------------------------
 
 ### 👤 Client

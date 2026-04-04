@@ -8,10 +8,12 @@
 <script setup>
 import BaseLayout from '@/components/BaseLayout.vue';
 import { useI18n } from 'vue-i18n';
+import {computed} from 'vue'
+import {authStore} from '@/stores/authStore'
 const {t, locale} = useI18n()
 
 let title = computed(() =>   
-  authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
+  authStore.isAdmin ? t("admin.dashboard") : t("dashboard")
 )
 
 </script>
