@@ -97,6 +97,11 @@
                             {{currentLanguage}}
              </DisclosureButton>
           </div>
+          <!-- <div class="mt-3 space-y-1 px-2">
+            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white uppercase" @click="updateCurrency()">                
+                            {{currentCurrency}}
+             </DisclosureButton>
+          </div> -->
           <div class="mt-3 space-y-1 px-2">
             <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="logOut()">
                             {{t("logout")}}
@@ -153,12 +158,8 @@ const currencies = computed(() =>{
 });
 
 
-// let title = computed(() =>   
-//   authStore.user.role == 'admin' ? t("admin.dashboard") : t("dashboard")
-// )
-
 let navigation = computed(() =>   
-  authStore.user.role == 'admin' ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
+  authStore.isAdmin ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
 )
 
 onMounted(() =>{})
@@ -169,8 +170,9 @@ const user = {
 }
 
 const logOut = () =>{
+  const routeRedirect = authStore.isAdmin ? 'LoginAdmin' : 'Login'
   authStore.logout();
-  router.replace({name: 'Login'})
+  router.replace({name: routeRedirect})
 }
 
 const updateLanguage = () => {
@@ -178,6 +180,13 @@ const updateLanguage = () => {
   locale.value = upLanguage
   currentConfigStore.setSelectedLanguage(upLanguage)
 }
+
+// const updateCurrency = () => {
+//   const upCurrency = currencies[0];
+//   console.log(upCurrency)
+//   // locale.value = upCurrency
+//   // currentConfigStore.setSelectedCurrency(upCurrency)
+// }
 
 const goRoute = (route) => {
   if(typeof route === 'string' && route != ''){

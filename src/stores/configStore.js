@@ -6,7 +6,7 @@ const currencies = {
 }
 
 export const languages = ["en","es"]
-export const baseLanguage = "es"
+export const baseLanguage = "en"
 const baseCurrency = "mxn";
 export const useCurrentConfigStore = defineStore('currentConfig', {
     state: () => ({

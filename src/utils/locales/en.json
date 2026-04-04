@@ -27,5 +27,7 @@
     "paginator.show": "Showing",
     "paginator.to": " to ",
     "paginator.of": " of ",
-    "paginator.results": "results"
+    "paginator.results": "results",
+    "paginator.previous": "Previous",
+    "paginator.next": "Next"
 }
