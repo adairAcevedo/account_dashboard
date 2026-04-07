@@ -15,14 +15,14 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              <div class="relative ml-3" @click="updateLanguage()">
-                  <span class="absolute -inset-1.5"></span>
-                  <span class="text-white text-upcase uppercase" >{{ currentLanguage}}</span>
-              </div>
-               <!-- currentCurrency dropdown -->
+              
+              <button type="button" class="relative ml-3 rounded-full p-1 text-gray-400 hover:text-white cursor-pointer" @click="updateLanguage()">
+                <span class="absolute -inset-1.5"></span>
+                <span class="text-white text-upcase uppercase" >{{ currentLanguage}}</span>
+              </button>
               <Menu as="div" class="relative ml-3">
-                <MenuButton class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                  <span class="absolute -inset-1.5"></span>
+                <MenuButton class="relative p-1 flex max-w-xs items-center rounded-full cursor-pointer">
+                  <span class="absolute"></span>
                   <span class="text-white text-upcase uppercase">{{ currentCurrency}}</span>
                 </MenuButton>
 
@@ -58,7 +58,7 @@
                         </div>
                     </MenuItem>
                     <MenuItem>
-                      <button class="w-full block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" @click="logOut()">
+                      <button class="w-full block text-start px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" @click="logOut()">
                         {{t("logout")}}
                       </button>
                       
@@ -93,17 +93,17 @@
             
           </div>
           <div class="mt-3 space-y-1 px-2">
-            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="updateLanguage()">                
+            <DisclosureButton class="block-full w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white px-5 uppercase px-5" @click="updateLanguage()">                
                             {{currentLanguage}}
              </DisclosureButton>
           </div>
-          <!-- <div class="mt-3 space-y-1 px-2">
-            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white uppercase" @click="updateCurrency()">                
+          <div class="mt-3 space-y-1 px-2">
+            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white uppercase text-start px-5" @click="updateCurrency()">                
                             {{currentCurrency}}
              </DisclosureButton>
-          </div> -->
+          </div>
           <div class="mt-3 space-y-1 px-2">
-            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white" @click="logOut()">
+            <DisclosureButton class="block-full w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white px-5" @click="logOut()">
                             {{t("logout")}}
              </DisclosureButton>
           </div>
@@ -181,12 +181,11 @@ const updateLanguage = () => {
   currentConfigStore.setSelectedLanguage(upLanguage)
 }
 
-// const updateCurrency = () => {
-//   const upCurrency = currencies[0];
-//   console.log(upCurrency)
-//   // locale.value = upCurrency
-//   // currentConfigStore.setSelectedCurrency(upCurrency)
-// }
+const updateCurrency = () => {
+  const upCurrency = currencies.value[0];
+  locale.value = upCurrency
+  currentConfigStore.setSelectedCurrency(upCurrency)
+}
 
 const goRoute = (route) => {
   if(typeof route === 'string' && route != ''){
