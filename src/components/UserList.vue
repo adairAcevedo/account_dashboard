@@ -1,44 +1,12 @@
 <template>
     <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8" :class="class">
       <div class="grid grid-cols-12 gap-x-6 px-0 py-3 border-b border-gray-200 dark:border-white/10">
-        <div class="col-span-1 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('nombre')">
-          <p class="text-sm font-semibold  tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("user.name")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'nombre'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='nombre' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='nombre' && sortList.direction =='asc'"/>
-        </div>
-        <div class="col-span-2 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('segundo_nombre')">
-          <p class="text-sm font-semibold  tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("user.second_name")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'segundo_nombre'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='segundo_nombre' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='segundo_nombre' && sortList.direction =='asc'"/>
-        </div>
-        <div class="col-span-2 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('apellido')">
-          <p class="text-sm font-semibold  tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("user.last_name")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'apellido'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='apellido' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='apellido' && sortList.direction =='asc'"/>
-        </div>
-        <div class="col-span-2 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('segundo_apellido')">
-          <p class="text-sm font-semibold  tracking-wider text-gray-900 dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("user.second_last_name")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'segundo_apellido'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='segundo_apellido' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='segundo_apellido' && sortList.direction =='asc'"/>
-        </div>
-        <div class="col-span-2 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('email')">
-          <p class="text-sm font-semibold  tracking-wider dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("email")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'email'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='email' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='email' && sortList.direction =='asc'"/>
-        </div>
-
-        <div class="col-span-2 flex items-center gap-x-1 cursor-pointer group" @click="clickSort('created_at')">
-          <p class="text-sm font-semibold  tracking-wider dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{t("user.created_at")}}</p>
-          <ArrowsUpDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field != 'created_at'" />
-          <ArrowDownIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='created_at' && sortList.direction =='desc'"/>
-          <ArrowUpIcon class="size-3.5 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-500" v-if="sortList.field =='created_at' && sortList.direction =='asc'"/>
-        </div>
-        
+        <HeaderList class="col-span-1" :field-order="sortList.field" :field-direction="sortList.direction" field-name="nombre" :text-header="t('user.name')" @click-header-sort="clickSort"/>
+        <HeaderList class="col-span-2" :field-order="sortList.field" :field-direction="sortList.direction" field-name="segundo_nombre" :text-header="t('user.second_name')" @click-header-sort="clickSort"/>
+        <HeaderList class="col-span-2" :field-order="sortList.field" :field-direction="sortList.direction" field-name="apellido" :text-header="t('user.last_name')" @click-header-sort="clickSort"/>
+        <HeaderList class="col-span-2" :field-order="sortList.field" :field-direction="sortList.direction" field-name="segundo_apellido" :text-header="t('user.second_last_name')" @click-header-sort="clickSort"/>
+        <HeaderList class="col-span-2" :field-order="sortList.field" :field-direction="sortList.direction" field-name="email" :text-header="t('email')" @click-header-sort="clickSort"/>
+        <HeaderList class="col-span-2" :field-order="sortList.field" :field-direction="sortList.direction" field-name="created_at" :text-header="t('user.created_at')" @click-header-sort="clickSort"/>
         <div class="col-span-1 flex items-center gap-x-1 cursor-pointer group">
           <p class="text-sm font-semibold  tracking-wider dark:text-white group-hover:text-gray-500 dark:text-gray-400">{{ t('user.status') }}</p>
         </div>
@@ -89,9 +57,9 @@
 <script setup>
 const props = defineProps(['users', 'sortList', 'isLoading', 'class'])
 const emit = defineEmits(['changeSort', 'goItem']);
-import {ArrowsUpDownIcon, ArrowDownIcon, ArrowUpIcon} from '@heroicons/vue/24/outline'
 import {formatDate} from '@/utils/methods'
 import { useI18n } from 'vue-i18n';
+import HeaderList from '@/components/lists/HeaderList.vue'
 const {t} = useI18n()
 const sortNextDirections = {
   desc: 'asc',
