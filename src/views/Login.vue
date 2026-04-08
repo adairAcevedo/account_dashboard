@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-// login para los clientes
 
 import LoginForm from './components/LoginForm.vue';
 
