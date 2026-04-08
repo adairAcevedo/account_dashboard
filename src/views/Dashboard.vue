@@ -10,7 +10,7 @@ import BaseLayout from '@/components/BaseLayout.vue';
 import { useI18n } from 'vue-i18n';
 import {computed} from 'vue'
 import {authStore} from '@/stores/authStore'
-const {t, locale} = useI18n()
+const {t} = useI18n()
 
 let title = computed(() =>   
   authStore.isAdmin ? t("admin.dashboard") : t("dashboard")

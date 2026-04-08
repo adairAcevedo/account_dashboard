@@ -93,7 +93,6 @@ const validGetMovements = (response) =>{
 }
 
 const handleChangeSort = (updateSort) => {
-  console.log('updateSort value ',updateSort)
   isLoading.value = true
 
   getMovements(

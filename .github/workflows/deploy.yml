@@ -6,7 +6,7 @@ on:
       - main # Cambia a 'master' si es el nombre de tu rama principal
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Esto soluciona el Warning
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: write
@@ -22,8 +22,7 @@ jobs:
       - name: Install pnpm 📦
         uses: pnpm/action-setup@v2
         with:
-          version: 8 # O la versión que prefieras
-
+          version: 8
       - name: Set up Node.js ⚙️
         uses: actions/setup-node@v4
         with:
@@ -41,5 +40,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # La carpeta que genera Vite
-          branch: gh-pages # Rama donde se subirá el contenido estático
+          folder: dist
+          branch: gh-pages
