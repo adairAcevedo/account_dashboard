@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-full">
-    <Disclosure as="nav" class="bg-gray-800/50" v-slot="{ open }">
+    <Disclosure as="nav" class="bg-gray-900" v-slot="{ open }">
+      <!-- full screen -->
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
@@ -16,6 +17,12 @@
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
               
+              <button type="button" class="relative ml-3 rounded-full p-1 text-gray-400 hover:text-white cursor-pointer" @click="toogleTheme()">
+                <span class="absolute -inset-1.5"></span>
+                <span class="dark:hidden">Oscuro 🌙</span>
+                <span class="hidden dark:inline">Claro ☀️</span>
+                <!-- <span class="text-white text-upcase uppercase" >{{ currentLanguage}}</span> -->
+              </button>
               <button type="button" class="relative ml-3 rounded-full p-1 text-gray-400 hover:text-white cursor-pointer" @click="updateLanguage()">
                 <span class="absolute -inset-1.5"></span>
                 <span class="text-white text-upcase uppercase" >{{ currentLanguage}}</span>
@@ -80,6 +87,7 @@
         </div>
       </div>
 
+      <!-- mobile -->
       <DisclosurePanel class="md:hidden">
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
           <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-950/50 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
@@ -92,16 +100,21 @@
             </div>
             
           </div>
-          <div class="mt-3 space-y-1 px-2">
+          <div class="mt-1 space-y-1 px-2">
             <DisclosureButton class="block-full w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white px-5 uppercase px-5" @click="updateLanguage()">                
                             {{currentLanguage}}
              </DisclosureButton>
           </div>
-          <div class="mt-3 space-y-1 px-2">
+          <div class="mt-1 space-y-1 px-2">
             <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white uppercase text-start px-5" @click="updateCurrency()">                
                             {{currentCurrency}}
              </DisclosureButton>
           </div>
+          <!-- <div class="mt-1 space-y-1 px-2">
+            <DisclosureButton class="block-full w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white uppercase text-start px-5" @click="updateCurrency()">                
+                            {{currentCurrency}}
+             </DisclosureButton>
+          </div> -->
           <div class="mt-3 space-y-1 px-2">
             <DisclosureButton class="block-full w-full text-start rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white px-5" @click="logOut()">
                             {{t("logout")}}
@@ -111,12 +124,12 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <header class="relative bg-gray-800 after:pointer-events-none after:absolute after:inset-x-0 after:inset-y-0 after:border-y after:border-white/10">
+    <header class="relative bg-white dark:bg-gray-800 after:pointer-events-none after:absolute after:inset-x-0 after:inset-y-0 after:border-y after:border-white/10">
       <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-white">{{title}}</h1>
+        <h1 class="text-3xl font-bold tracking-tight dark:text-white">{{title}}</h1>
       </div>
     </header>
-    <main>
+    <main class="bg-white dark:bg-gray-800">
         <slot></slot>
     </main>
   </div>
@@ -158,6 +171,16 @@ const currencies = computed(() =>{
 });
 
 
+const toogleTheme = () =>{
+  const html = document.documentElement;
+  if(html.classList.contains('dark')){
+    html.classList.remove('dark');
+    localStorage.theme = 'light';
+  }else{
+    html.classList.add('dark');
+    localStorage.theme = 'dark';
+  }
+}
 let navigation = computed(() =>   
   authStore.isAdmin ? [{ name: t('users'), route: 'Users', current: false }] : [{ name: t('movements'), route: 'Movements', current: false}]
 )
